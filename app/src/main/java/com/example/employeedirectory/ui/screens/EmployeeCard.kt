@@ -1,6 +1,5 @@
 package com.example.employeedirectory.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,30 +20,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.employeedirectory.R
 import com.example.employeedirectory.model.response.Employee
 
 @Composable
 fun EmployeeCard(employee: Employee) {
-    val employeePic = rememberAsyncImagePainter(
-        ImageRequest
-            .Builder(LocalContext.current)
-            .data(data = employee.photoUrlSmall)
-            .apply(
-                block = fun ImageRequest.Builder.() {
-                    placeholder(R.drawable.ic_placeholder)
-                    error(R.drawable.ic_error_foreground)
-                    crossfade(1000)
-                }
-            ).build()
-    )
+
+    val imageRequest = ImageRequest.Builder(LocalContext.current)
+        .data(employee.photoUrlSmall)
+        .memoryCacheKey(employee.photoUrlSmall)
+        .placeholder(R.drawable.ic_placeholder)
+        .error(R.drawable.ic_error_foreground)
+        .fallback(R.drawable.ic_placeholder)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .build()
 
     Card(
         modifier = Modifier
@@ -74,10 +70,9 @@ fun EmployeeCard(employee: Employee) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Image(
-                        painter = employeePic,
+                    AsyncImage(
+                        model = imageRequest,
                         contentDescription = "Small profile pic",
-                        contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .size(150.dp)
                             .clip(CircleShape)
