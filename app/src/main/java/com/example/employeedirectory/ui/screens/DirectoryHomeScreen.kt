@@ -18,18 +18,24 @@ import com.example.employeedirectory.viewmodel.EmployeeViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DirectoryHomeScreen(navHostController: NavHostController, employeeViewModel: EmployeeViewModel = hiltViewModel()) {
+fun DirectoryHomeScreen(
+    navHostController: NavHostController,
+    employeeViewModel: EmployeeViewModel = hiltViewModel()
+) {
     val isRefreshing by employeeViewModel.isRefreshing.collectAsStateWithLifecycle()
-    val pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = { employeeViewModel.refresh() })
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = { employeeViewModel.refresh() })
 
     Scaffold(
         topBar = {
             DirectoryTopBar()
         },
         content = { innerPadding ->
-            Box(modifier = Modifier
-                .padding(innerPadding)
-                .pullRefresh(pullRefreshState)
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .pullRefresh(pullRefreshState)
             ) {
                 NavigationScreen(employeeUiState = employeeViewModel.employeeUiState)
                 PullRefreshIndicator(

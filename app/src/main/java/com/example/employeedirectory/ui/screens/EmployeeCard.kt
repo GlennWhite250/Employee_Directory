@@ -92,7 +92,13 @@ fun EmployeeCard(employee: Employee) {
                     }
                 }
                 Spacer(modifier = Modifier.height(15.dp))
-                employee.uuid?.let { Text(text = "ID: $it", overflow = TextOverflow.Clip, maxLines = 1) } ?: Text(text = " ")
+                employee.uuid?.let {
+                    Text(
+                        text = "ID: $it",
+                        overflow = TextOverflow.Clip,
+                        maxLines = 1
+                    )
+                } ?: Text(text = " ")
                 Text(text = "Phone Number: " + employee.phoneNumber)
                 Text(text = "Email: " + employee.emailAddress)
                 Text(text = "Team: " + employee.team)

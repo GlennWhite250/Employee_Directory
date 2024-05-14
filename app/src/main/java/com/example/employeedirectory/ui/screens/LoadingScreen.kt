@@ -15,7 +15,8 @@ fun LoadingScreen() {
     Image(
         painter = painterResource(id = R.drawable.loading_img),
         contentDescription = "Loading...",
-        modifier = Modifier.size(200.dp)
+        modifier = Modifier
+            .size(200.dp)
             .fillMaxSize()
     )
 }

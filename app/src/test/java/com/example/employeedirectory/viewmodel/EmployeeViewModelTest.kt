@@ -27,7 +27,7 @@ class EmployeeViewModelTest {
     fun successfulEmployeeCall() = runTest {
         val test = buildEmployeeList()
         coEvery { mockEmployeeApi.fetchEmployees() } returns buildEmployeeList()
-      val repo = EmployeeRepo(mockEmployeeApi)
+        val repo = EmployeeRepo(mockEmployeeApi)
         launch { repo.getEmployees() }
         advanceUntilIdle()
         assertEquals(1, repo.getEmployees().employees.size)
