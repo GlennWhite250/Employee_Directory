@@ -1,9 +1,9 @@
 package com.example.employeedirectory.model.repository
 
+import com.example.employeedirectory.MainDispatcherRule
 import com.example.employeedirectory.model.remote.EmployeeApi
 import com.example.employeedirectory.model.response.Employee
 import com.example.employeedirectory.model.response.EmployeeResponse
-import com.example.employeedirectory.viewmodel.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
