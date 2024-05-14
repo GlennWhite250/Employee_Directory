@@ -1,6 +1,5 @@
 package com.example.employeedirectory.viewmodel
 
-import com.example.employeedirectory.model.remote.EmployeeApi
 import com.example.employeedirectory.model.repository.EmployeeRepo
 import com.example.employeedirectory.model.response.Employee
 import com.example.employeedirectory.model.response.EmployeeResponse
@@ -25,6 +24,7 @@ import org.junit.runner.Description
 class EmployeeViewModelTest {
 
     private val dataSource = mockk<EmployeeRepo>(relaxed = true)
+
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -62,8 +62,9 @@ class EmployeeViewModelTest {
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
 ) : TestWatcher() {
     override fun starting(description: Description) {
         Dispatchers.setMain(testDispatcher)
