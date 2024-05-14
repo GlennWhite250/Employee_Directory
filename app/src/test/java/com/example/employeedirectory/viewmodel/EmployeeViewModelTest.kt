@@ -9,42 +9,39 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EmployeeViewModelTest {
 
-    private var mockEmployeeApi = mockk<EmployeeApi>(relaxed = true)
-
+    private val dataSource = mockk<EmployeeRepo>(relaxed = true)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun successfulEmployeeCall() = runTest {
-        val test = buildEmployeeList()
-        coEvery { mockEmployeeApi.fetchEmployees() } returns buildEmployeeList()
-        val repo = EmployeeRepo(mockEmployeeApi)
-        launch { repo.getEmployees() }
+        val testData = buildEmployeeList()
+        coEvery { dataSource.getEmployees() } returns buildEmployeeList()
+        val sut = EmployeeViewModel(employeeRepo = dataSource)
+        launch { sut.refresh() }
         advanceUntilIdle()
-        assertEquals(1, repo.getEmployees().employees.size)
+        val data = sut.employees.value
 
-        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
-        Dispatchers.setMain(testDispatcher)
-
-        try {
-            val employeeViewModel = EmployeeViewModel(employeeRepo = repo)
-            launch { employeeViewModel.refresh() }
-            advanceUntilIdle()
-            assertEquals(test.employees, employeeViewModel.employees.value?.employees)
-            assertEquals(true, employeeViewModel.isRefreshing.value)
-        } finally {
-            Dispatchers.resetMain()
-        }
+        assertEquals(testData, data)
+        assertEquals(false, sut.isRefreshing.value)
+        assertEquals(EmployeeUiState.Success(employeeResponse = testData), sut.employeeUiState)
     }
+
 
     companion object {
         fun buildEmployeeList() = EmployeeResponse(
@@ -62,5 +59,17 @@ class EmployeeViewModelTest {
                 )
             )
         )
+    }
+}
+
+class MainDispatcherRule(
+    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+) : TestWatcher() {
+    override fun starting(description: Description) {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    override fun finished(description: Description) {
+        Dispatchers.resetMain()
     }
 }
