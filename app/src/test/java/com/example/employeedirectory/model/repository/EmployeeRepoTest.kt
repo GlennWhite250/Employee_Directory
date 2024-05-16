@@ -37,13 +37,13 @@ class EmployeeRepoTest {
             employees = listOf(
                 Employee(
                     uuid = "0d8fcc12-4d0c-425c-8355-390b312b909c",
-                    fullName = "Justine Mason",
+                    fullName = "Joanie Decopain",
                     phoneNumber = "5553280123",
-                    emailAddress = "jmason.demo@squareup.com",
-                    biography = "Engineer on the Point of Sale team.",
+                    emailAddress = "haitain.sexy.princess@squareup.com",
+                    biography = "Loves Glenn",
                     photoUrlSmall = "https://s3.amazonaws.com/sq-mobile-interview/photos/16c00560-6dd3-4af4-97a6-d4754e7f2394/small.jpg",
                     photoUrlLarge = "https://s3.amazonaws.com/sq-mobile-interview/photos/16c00560-6dd3-4af4-97a6-d4754e7f2394/large.jpg",
-                    team = "Point of Sale",
+                    team = "Glenn Team",
                     employeeType = "FULL_TIME"
                 )
             )

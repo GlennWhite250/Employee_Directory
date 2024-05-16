@@ -48,7 +48,7 @@ class EmployeeViewModelTest {
                     biography = "Engineer on the Point of Sale team.",
                     photoUrlSmall = "https://s3.amazonaws.com/sq-mobile-interview/photos/16c00560-6dd3-4af4-97a6-d4754e7f2394/small.jpg",
                     photoUrlLarge = "https://s3.amazonaws.com/sq-mobile-interview/photos/16c00560-6dd3-4af4-97a6-d4754e7f2394/large.jpg",
-                    team = "Point of Sale",
+                    team = null,
                     employeeType = "FULL_TIME"
                 )
             )
