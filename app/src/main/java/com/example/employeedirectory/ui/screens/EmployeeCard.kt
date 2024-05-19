@@ -1,5 +1,9 @@
 package com.example.employeedirectory.ui.screens
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,15 +25,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.employeedirectory.R
 import com.example.employeedirectory.model.response.Employee
 
+
+@SuppressLint("QueryPermissionsNeeded")
 @Composable
 fun EmployeeCard(employee: Employee) {
 
@@ -41,6 +49,18 @@ fun EmployeeCard(employee: Employee) {
         .fallback(R.drawable.ic_placeholder)
         .memoryCachePolicy(CachePolicy.ENABLED)
         .build()
+
+    val context = LocalContext.current
+    val appendedEmail = buildAnnotatedString {
+        append("Email: ")
+        append(employee.emailAddress)
+    }
+    var uri = Uri.parse("mailto:" + employee.emailAddress)
+        .buildUpon()
+        .appendQueryParameter("subject", "Testing email")
+        .appendQueryParameter("body", "Testing the body of the email")
+        .build()
+
 
     Card(
         modifier = Modifier
@@ -95,7 +115,22 @@ fun EmployeeCard(employee: Employee) {
                     )
                 } ?: Text(text = " ")
                 Text(text = "Phone Number: " + employee.phoneNumber)
-                Text(text = "Email: " + employee.emailAddress)
+                Text(
+                    text = "Email: " + employee.emailAddress,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO)
+                        intent.setData(
+                            Uri.parse("mailto:" + employee.emailAddress)
+                                .buildUpon()
+                                .build()
+                        ) // only email apps should handle this
+                        startActivity(
+                            context,
+                            Intent.createChooser(intent, "Choose email app."),
+                            null
+                        )
+                    }
+                )
                 Text(text = "Team: " + employee.team)
                 Text(text = "Employee Type: " + employee.employeeType)
             }
