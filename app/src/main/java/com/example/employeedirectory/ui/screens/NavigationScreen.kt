@@ -8,6 +8,6 @@ fun NavigationScreen(employeeUiState: EmployeeUiState) {
     when(employeeUiState) {
         is EmployeeUiState.Loading -> LoadingScreen()
         is EmployeeUiState.Error -> ErrorScreen(errorMessage = employeeUiState.errorMessage)
-        is EmployeeUiState.Success -> DirectoryScreen(employeeList = employeeUiState.employeeResponse)
+        is EmployeeUiState.Success -> DirectoryScreen()
     }
 }

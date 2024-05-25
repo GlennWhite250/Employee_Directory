@@ -34,8 +34,8 @@ class EmployeeViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
-            employeeUiState = EmployeeUiState.Loading
             _isRefreshing.emit(true)
+            employeeUiState = EmployeeUiState.Loading
             employeeUiState = try {
                 _employees.value = employeeRepo.getEmployees()
                 EmployeeUiState.Success(employeeResponse = employees.value)
