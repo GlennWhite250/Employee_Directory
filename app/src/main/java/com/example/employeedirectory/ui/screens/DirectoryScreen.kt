@@ -1,13 +1,11 @@
 package com.example.employeedirectory.ui.screens
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.employeedirectory.viewmodel.EmployeeViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DirectoryScreen(
     employeeViewModel: EmployeeViewModel = hiltViewModel()
@@ -16,9 +14,9 @@ fun DirectoryScreen(
     val employeeList by employeeViewModel.employees.collectAsStateWithLifecycle()
 
     if (employeeList != null) {
-        employeeList?.employees?.let {
+        employeeList?.employees?.let { listOfEmployees ->
             PullToRefreshLazyColumn(
-                items = it.sortedBy { it?.fullName },
+                items = listOfEmployees.sortedBy { it?.fullName },
                 content = { employee ->
                     if (employee != null) {
                         EmployeeCard(employee = employee)
